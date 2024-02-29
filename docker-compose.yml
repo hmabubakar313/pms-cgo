@@ -5,9 +5,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: gunicorn --bind 0.0.0.0:8000 django_project.wsgi:application
+    environment:
+      DEBUG: 'true'
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
+      - ./static:/static  # Mount local static files directory
     ports:
       - 8000:8000
     env_file:

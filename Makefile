@@ -1,15 +1,3 @@
-IMAGE_NAME ?= pms
-
-.PHONY: run
-run: stop 
-	docker build --tag ${IMAGE_NAME} .
-	docker run -d -p 8000:8000 ${IMAGE_NAME}
-
-.PHONY: stop
-stop:
-    docker ps --filter "ancestor=${IMAGE_NAME}" --filter "expose=${PORT}/tcp" -q | xargs docker stop || true
-
-
 .PHONY: build
 build: ## Build developer containers.
 	docker compose build
@@ -41,3 +29,8 @@ makemigrations: ## Build developer containers.
 .PHONY: migrate
 migrate: ## Build developer containers.
 	docker compose run --rm web python manage.py migrate
+
+.PHONY: createsuperuser
+createsuperuser: ## Build developer containers.
+	docker compose run --rm web python manage.py createsuperuser
+

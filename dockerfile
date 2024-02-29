@@ -21,8 +21,14 @@ RUN apt-get update \
 COPY . /code/
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Create a directory for static files
+RUN mkdir -p /code/static
+
+# Set permissions for the static files directory
+RUN chown -R www-data:www-data /code/static
+
 # Expose port 8000 to the outside world
 EXPOSE 8000
 
-# Run Django app when the container launches
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "django_project.wsgi:application"]
+# # Run Django app when the container launches
+# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "django_project.wsgi:application"]
