@@ -31,4 +31,4 @@ RUN chown -R www-data:www-data /code/static
 EXPOSE 8000
 
 # # Run Django app when the container launches
-# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "django_project.wsgi:application"]
+# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "core.wsgi:application"]
