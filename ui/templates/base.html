@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="{% static "plugins/daterangepicker/daterangepicker.css" %}">
   <!-- summernote -->
   <link rel="stylesheet" href="{% static "plugins/summernote/summernote-bs4.min.css" %}">
+ 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -825,7 +826,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
+            <h1 class="m-0">{% block title %}Dashboard{% endblock %}</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -839,6 +840,8 @@
     <!-- /.content-header -->
 
     <!-- Main content -->
+    {% block content %}
+    {% endblock %}
   
     <!-- /.content -->
   </div>
