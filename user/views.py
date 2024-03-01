@@ -17,4 +17,4 @@ def register(request):
         'form': form
     }
 
-    return render(request, "user.html", context)
+    # return render(request, "register.html", context)

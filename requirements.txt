@@ -7,3 +7,4 @@ drf-yasg==1.21.7
 coverage==7.3.3
 PyYaml
 gunicorn==21.2.0
+pillow==10.2.0
