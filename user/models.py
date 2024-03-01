@@ -19,7 +19,7 @@ class CustomUser(AbstractUser):
 
 
 class PropertyManager(models.Model):
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
     username = models.CharField("username", max_length=100)
 
     def __str__(self):
