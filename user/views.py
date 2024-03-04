@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
-from django.contrib.auth import authenticate,login as dj_login
-from .models import PropertyManager,CustomUser,Listing,Image, Lead
+from django.contrib.auth import authenticate, login as dj_login
+from .models import PropertyManager, CustomUser, Listing, Image, Lead, Tenant
 from django.contrib import messages
 from datetime import datetime
 from django.utils.dateparse import parse_date
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from .forms import TenantsForm, CustomUserCreationForm
+from django.forms import inlineformset_factory
+
 
 @login_required(login_url='login')
 def dashboard(request):
@@ -82,18 +85,13 @@ def create_listing(request):
         num_bathrooms = request.POST.get('num_bathrooms')
         square_footage = request.POST.get('square_footage')
         address = request.POST.get('address')
-        
-        
+
+        print(request.user,"request.user")
         property_manager = PropertyManager.objects.get(user=request.user)
-        
-        
-        
+
         image_file = request.FILES.get('image')
         # print("image",image)
         image_instance = Image.objects.create(image=image_file)
-
-        
-       
 
         # Create the Listing object
         listing = Listing.objects.create(
@@ -136,6 +134,7 @@ def delete_listing(request, list_id):
     return redirect('listing')
 
     return render(request, 'table.html', {'listings': listings})
+
 
 def update_listing(request, list_id):
     # Get the existing listing object from the database
@@ -206,3 +205,41 @@ def delete_lead(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
     lead.delete()
     return redirect('list_leads')
+
+
+def create_tenant(request):
+    if request.method == 'POST':
+        form = TenantsForm(request.POST)
+        if form.is_valid():
+            tenant = form.save(commit=False)
+            user_form = CustomUserCreationForm(request.POST)
+            if user_form.is_valid():
+                user = user_form.save()
+            else:
+                return "User email or password is invalid"
+            tenant.user = user
+            tenant.save()
+
+
+def delete_tenant(request, tenant_id):
+    if request.method == 'POST' and tenant_id:
+        tenant = Tenant.objects.get(id=tenant_id)
+        tenant.delete()
+    # else:
+    #     return "tenant id n"
+        
+
+def update_tenant(request, tenant_id):
+    tenant = Tenant.objects.get(id=tenant_id)
+    if request.method == 'POST' and tenant_id:
+        form = TenantsForm(request.POST, instance=tenant)
+        if form.is_valid():
+            form.save()
+
+
+def get_tenant_list(request):
+    return Tenant.objects.all()
+
+
+def retrieve_tenant(request, tenant_id):
+    return Tenant.objects.get(id=tenant_id)

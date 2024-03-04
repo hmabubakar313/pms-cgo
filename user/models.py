@@ -1,13 +1,20 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from .managers import CustomUserManager
 
 
 class CustomUser(AbstractUser):
+    USER_TYPE_CHOICES = (
+        ('broker', 'Broker'),
+        ('property_manager', 'Property Manager'),
+        ('tenant', 'Tenant'),
+        )
+
     username = None
     email = models.EmailField(_("email address"), unique=True)
+    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -47,14 +54,18 @@ class Image(models.Model):
 
 
 class Brokers(models.Model):
+    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
     property_manager = models.ForeignKey('PropertyManager', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+    commission_rate = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(1)])
 
 
 class Tenant(models.Model):
+    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
     property_manager = models.ForeignKey('PropertyManager', on_delete=models.CASCADE)
-    broker = models.ForeignKey('Brokers', on_delete=models.CASCADE)
+    broker = models.ForeignKey('Brokers', on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100)
+    listing = models.OneToOneField('Listing', on_delete=models.CASCADE, null=True, blank=True)
 
 
 class Lead(models.Model):
@@ -72,3 +83,25 @@ class Lead(models.Model):
 
     def __str__(self):
         return f"Lead on {self.date} (Status: {self.status})"
+
+
+class ContractAgreement(models.Model):
+    commission_rate = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(1)])
+    broker = models.OneToOneField('Broker', on_delete=models.CASCADE)
+    property_manager = models.ForeignKey('PropertyManager', on_delete=models.CASCADE)
+
+
+class Document(models.Model):
+    DOCUMENT_TYPES = (
+        ('image', 'Image'),
+        ('pdf', 'PDF'),
+        ('agreement', 'Agreement'),
+    )
+    contract_agreement = models.ForeignKey('ContractAgreement', on_delete=models.CASCADE)
+    document_type = models.CharField(max_length=20, choices=DOCUMENT_TYPES)
+    title = models.CharField(max_length=100)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    listing = models.OneToOneField('Listing', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
