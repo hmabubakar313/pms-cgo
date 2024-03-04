@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %} Create Lead{% endblock title %}
+{% block content %}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Add Lead Details</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form action="{% url 'create_lead' %}" method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" placeholder="Enter date">
+                    </div>
+                    <div class="form-group">
+                        <label for="person_in_charge">Person in Charge</label>
+                        <input type="text" class="form-control" id="person_in_charge" name="person_in_charge" placeholder="Enter person in charge">
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select class="form-control" id="status" name="status">
+                            <option value="Pending">Pending</option>
+                            <option value="Scheduled">Scheduled</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Canceled">Canceled</option>
+                        </select>
+                    </div>
+                    {% comment %} <div class="form-group">
+                        <label for="tenant_met">Tenant Met</label>
+                        <input type="text" class="form-control" id="tenant_met" name="tenant_met" placeholder="Enter tenant met">
+                    </div> {% endcomment %}
+                </div>
+                <!-- /.card-body -->
+                
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            
+            
+            </div>
+        </div>
+    </section>
+</div>
+
+
+{% endblock content %}

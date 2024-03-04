@@ -12,6 +12,10 @@ urlpatterns = [
     path('view_list/<int:list_id>',views.view_list,name="view_list"),
     path('delete_listing/<int:list_id>',views.delete_listing,name="delete_listing"),
     path('update_listing/<int:list_id>',views.update_listing,name="update_listing"),
+    path('create_lead/',views.create_lead,name="create_lead"),
+    path('list_leads/',views.list_leads,name="list_leads"),
+    path('update_lead/<lead_id>/',views.update_lead,name="update_lead"),
+    path('delete_lead/<lead_id>/',views.delete_lead,name="delete_lead"),
     
 ]
 

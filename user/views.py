@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.contrib.auth import authenticate,login as dj_login
@@ -11,7 +11,8 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='login')
 def dashboard(request):
-    return render(request, 'base.html')
+    user = PropertyManager.objects.get(user=request.user)
+    return render(request, 'base.html', {'user': user})
 
 
 def login(request):
@@ -82,7 +83,7 @@ def create_listing(request):
         square_footage = request.POST.get('square_footage')
         address = request.POST.get('address')
         
-        print(request.user,"request.user")
+        
         property_manager = PropertyManager.objects.get(user=request.user)
         
         
@@ -137,7 +138,9 @@ def delete_listing(request, list_id):
     return render(request, 'table.html', {'listings': listings})
 
 def update_listing(request, list_id):
-    listing = Listing.objects.get(id=list_id)
+    # Get the existing listing object from the database
+    listing = get_object_or_404(Listing, id=list_id)
+    
     if request.method == 'POST':
         title = request.POST.get('title')
         price = request.POST.get('price')
@@ -146,57 +149,60 @@ def update_listing(request, list_id):
         square_footage = request.POST.get('square_footage')
         address = request.POST.get('address')
         image = request.FILES.get('image')
+        
+        # Update the attributes of the existing listing object
         listing.title = title
         listing.price = price
         listing.num_bedrooms = num_bedrooms
         listing.num_bathrooms = num_bathrooms
         listing.square_footage = square_footage
         listing.address = address
-        listing.image = image
+        
+        if 'image' in request.FILES:
+            image = request.FILES['image']
+            listing.image = image
+        
+        # Save the changes to the existing listing object
         listing.save()
+        
+        # Redirect to a relevant page (e.g., listing detail page)
         return redirect('listing')
 
+    # If the request method is not POST, render the update form with the existing listing object
     return render(request, 'update_list.html', {'listing': listing})
 
-@login_required(login_url='login')
-def leads(request):
+
+def create_lead(request):
     if request.method == 'POST':
         date = request.POST.get('date')
         person_in_charge = request.POST.get('person_in_charge')
         status = request.POST.get('status')
-        tenant_met = request.POST.get('tenant_met')
 
-        date_object = datetime.strptime(date, '%Y-%m-%d').date()
-        date_object = parse_date(date)
-        Lead.objects.create(date=date_object, tenant_met=tenant_met,
-                            person_in_charge=person_in_charge, status=status)
+        lead = Lead.objects.create(date=date, person_in_charge=person_in_charge, status=status, tenant_met_id=tenant_met_id)
+        return redirect('list_leads')  # Redirect to wherever you want
+    else:
+        return render(request, 'create_lead.html')
 
-    if request.method == 'GET':
-        Leads_id = request.GET.get('property_manager_id')
 
-        Lead.objects.filter(property_manager_id=Leads_id)
-        return HttpResponse
+def list_leads(request):
+    leads = Lead.objects.all()
+    return render(request, 'leeds.html', {'leads': leads})
 
-    if request.method == 'DELETE':
-        lead_id = request.method.get('lead_id')
-        lead = Lead.objects.get(id=lead_id)
-        lead.delete()
+# # Update
+def update_lead(request, lead_id):
+    lead = get_object_or_404(Lead, id=lead_id)
+    if request.method == 'POST':
+        lead.date = request.POST.get('date')
+        lead.person_in_charge = request.POST.get('person_in_charge')
+        lead.status = request.POST.get('status')
+        
+        lead.save()
+        return redirect('list_leads')
+    else:
+        return render(request, 'update_lead.html', {'lead': lead})
 
-    if request.method == 'PUT':
-        request_data = request.PUT.dict()
-        object_id = request_data.pop('id', None)
-        new_values = request_data
 
-        if object_id is None:
-            return JsonResponse({'error': 'Object ID not provided'}, status=400)
-
-        try:
-            obj = Lead.objects.get(pk=object_id)
-        except Lead.DoesNotExist:
-            return JsonResponse({'error': 'Object not found'}, status=404)
-
-        for key, value in new_values.items():
-            setattr(obj, key, value)
-
-        obj.save()
-        return JsonResponse({'message': 'Object updated successfully'})
+def delete_lead(request, lead_id):
+    lead = get_object_or_404(Lead, id=lead_id)
+    lead.delete()
+    return redirect('list_leads')

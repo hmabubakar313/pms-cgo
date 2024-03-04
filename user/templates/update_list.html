@@ -15,12 +15,13 @@
             <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Quick Example</h3>
+                <h3 class="card-title">Update Listing Details</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{% url 'create_listing' %}" method="post" enctype="multipart/form-data">
+              <form action="{% url 'update_listing' listing.id %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+                <input type="hidden" name="_method" value="PUT">
                 <div class="card-body">
                     <div class="form-group">
                         <label for="title">Title</label>
@@ -48,7 +49,7 @@
                     </div>
                     <div class="form-group">
                         <label for="image">Image</label>
-                        <input type="file" class="form-control-file" id="image" name="image" value="{{ listing.image }}" multiple>
+                        <input type="file" class="form-control-file" id="image" name="image" multiple>
                     </div>
                 </div>
                 <!-- /.card-body -->
@@ -63,5 +64,6 @@
         </div>
     </section>
 </div>
+
 
 {% endblock content %}

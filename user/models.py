@@ -68,7 +68,7 @@ class Lead(models.Model):
     date = models.DateField()
     person_in_charge = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
-    tenant_met = models.OneToOneField('Tenant',on_delete=models.CASCADE, blank=True)
+    tenant_met = models.OneToOneField('Tenant',on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f"Lead on {self.date} (Status: {self.status})"

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Leads{% endblock %}
+{% block content %}
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title"> 
+                {% block heading %}<a href="{% url 'create_lead' %}" class="btn btn-primary">Add Leed</a>
+                    {% endblock  %}
+                  </h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                          <th>Date</th>
+                          <th>Person In Charge</th>
+                          <th>Status</th>
+                          <th>Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for leed in leads %}
+                    <tr>
+                        <td>{{ leed.date }}</td>
+                        <td>{{ leed.person_in_charge }}</td>
+                        <td>{{ leed.status }}</td>
+                       
+                        {% comment %} <td><img src="{{ listing.description }}"  style="max-width: 100px;"></td> {% endcomment %}
+                        <td>
+                            {% comment %} <a href="{% url 'view_list' listing.id %}" class="btn btn-primary">View</a>   {% endcomment %}
+                           
+                            <a href="{% url 'delete_lead' leed.id %}" class="btn btn-danger">Delete</a>
+                            <a href="{% url 'update_lead' leed.id %}" class="btn btn-success">Update</a>
+                            
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                    {% comment %} <tfoot>
+                    <tr>
+                      <th>Rendering engine</th>
+                      <th>Browser</th>
+                      <th>Platform(s)</th>
+                      <th>Engine version</th>
+                      <th>CSS grade</th>
+                    </tr>
+                    </tfoot> {% endcomment %}
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+        </div>
+    </div>
+</div>
+<section>
+
+{% endblock  %}
+
+ 
