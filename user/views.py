@@ -1,24 +1,26 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
-from django.contrib.auth import authenticate,login as dj_login
-from .models import PropertyManager,CustomUser,Listing
+from django.contrib.auth import authenticate, login as dj_login
+from .models import PropertyManager, CustomUser, Listing, Lead
 from django.contrib import messages
+from datetime import datetime
+from django.utils.dateparse import parse_date
+from django.http import JsonResponse
 
-
-# Create your views here.
 
 def dashboard(request):
-    return render(request,'base.html')
+    return render(request, 'base.html')
+
 
 def login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        
+
         # Authenticate user using email and password
         user = authenticate(request, email=email, password=password)
-        
+
         if user is not None:
             # Authentication successful, login the user
             dj_login(request, user)
@@ -36,9 +38,6 @@ def login(request):
         return render(request, 'login.html')
 
 
-
-
-
 def signup(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -46,7 +45,7 @@ def signup(request):
         password = request.POST.get('password')
         retype_password = request.POST.get('retype_password')
         terms_agreed = request.POST.get('terms')
-        print(username,email,password,retype_password,terms_agreed,"signup")
+        print(username, email, password, retype_password, terms_agreed, "signup")
 
         # Check if passwords match
         if password != retype_password:
@@ -57,7 +56,7 @@ def signup(request):
         try:
             # Create a new user
             user = CustomUser.objects.create_user(email=email, password=password)      
-            print(user,"user")
+            print(user, "user")
             user.save()
             property_manager = PropertyManager.objects.create(user=user, username=username)
             property_manager.save()
@@ -90,7 +89,7 @@ def signup(request):
 
 def listing(request):
     listings = Listing.objects.all()
-    return render(request,'listing.html',{'listings':listings})
+    return render(request, 'listing.html', {'listings': listings})
 
 
 def view_list(request,list_id):
@@ -100,8 +99,52 @@ def view_list(request,list_id):
     return render(request,'view_list.html',{'listings':listing})
 
 
-def delete_listing(request,list_id):
+def delete_listing(request, list_id):
     listing = Listing.objects.get(id=list_id)
     listing.delete()
     return redirect('listing')
 
+    return render(request, 'table.html', {'listings': listings})
+
+
+def leads(request):
+    if request.method == 'POST':
+        date = request.POST.get('date')
+        person_in_charge = request.POST.get('person_in_charge')
+        status = request.POST.get('status')
+        tenant_met = request.POST.get('tenant_met')
+
+        date_object = datetime.strptime(date, '%Y-%m-%d').date()
+        date_object = parse_date(date)
+        Lead.objects.create(date=date_object, tenant_met=tenant_met,
+                            person_in_charge=person_in_charge, status=status)
+
+    if request.method == 'GET':
+        Leads_id = request.GET.get('property_manager_id')
+
+        Lead.objects.filter(property_manager_id=Leads_id)
+        return HttpResponse
+
+    if request.method == 'DELETE':
+        lead_id = request.method.get('lead_id')
+        lead = Lead.objects.get(id=lead_id)
+        lead.delete()
+
+    if request.method == 'PUT':
+        request_data = request.PUT.dict()
+        object_id = request_data.pop('id', None)
+        new_values = request_data
+
+        if object_id is None:
+            return JsonResponse({'error': 'Object ID not provided'}, status=400)
+
+        try:
+            obj = Lead.objects.get(pk=object_id)
+        except Lead.DoesNotExist:
+            return JsonResponse({'error': 'Object not found'}, status=404)
+
+        for key, value in new_values.items():
+            setattr(obj, key, value)
+
+        obj.save()
+        return JsonResponse({'message': 'Object updated successfully'})
