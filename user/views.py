@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login as dj_login
-from .models import PropertyManager, CustomUser, Listing, Lead
+from django.contrib.auth import authenticate,login as dj_login
+from .models import PropertyManager,CustomUser,Listing,Image, Lead
 from django.contrib import messages
 from datetime import datetime
 from django.utils.dateparse import parse_date
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
-
+@login_required(login_url='login')
 def dashboard(request):
     return render(request, 'base.html')
 
@@ -71,34 +72,63 @@ def signup(request):
         # If not a POST request, render the signup page
         return render(request, 'signup.html')
 
+@login_required(login_url='login')
+def create_listing(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        price = request.POST.get('price')
+        num_bedrooms = request.POST.get('num_bedrooms')
+        num_bathrooms = request.POST.get('num_bathrooms')
+        square_footage = request.POST.get('square_footage')
+        address = request.POST.get('address')
+        
+        print(request.user,"request.user")
+        property_manager = PropertyManager.objects.get(user=request.user)
+        
+        
+        
+        image_file = request.FILES.get('image')
+        # print("image",image)
+        image_instance = Image.objects.create(image=image_file)
 
-# def create_listing(request):
-#     if request.method == 'POST':
-#         title = request.POST.get('title')
-#         description = request.POST.get('description')
-#         price = request.POST.get('price')
-#         location = request.POST.get('location')
-#         image = request.FILES['image']
-#         print(title,description,price,location,image,"create_listining")
-#         listing = Listing.objects.create(title=title,description=description,price=price,location=location,image=image)
-#         listing.save()
-#         return redirect('listing')
-#     else:
-#         return render(request,'create_list.html')
+        
+       
+
+        # Create the Listing object
+        listing = Listing.objects.create(
+            property_manager=property_manager,
+            title=title,
+            price=price,
+            num_bedrooms=num_bedrooms,
+            num_bathrooms=num_bathrooms,
+            square_footage=square_footage,
+            address=address,
+           
+        )
+        listing.image.add(image_instance)
+        listing.save()
+
+        return redirect('listing')  # Redirect to wherever you want
+
+    else:
+        # If not a POST request, render the form
+        
+        return render(request, 'create_list.html')
 
 
+@login_required(login_url='login')
 def listing(request):
     listings = Listing.objects.all()
     return render(request, 'listing.html', {'listings': listings})
 
-
+@login_required(login_url='login')
 def view_list(request,list_id):
     print(list_id,"list_id")
     listing = Listing.objects.get(id=list_id)
     print(listing,"listing")
     return render(request,'view_list.html',{'listings':listing})
 
-
+@login_required(login_url='login')
 def delete_listing(request, list_id):
     listing = Listing.objects.get(id=list_id)
     listing.delete()
@@ -106,7 +136,29 @@ def delete_listing(request, list_id):
 
     return render(request, 'table.html', {'listings': listings})
 
+def update_listing(request, list_id):
+    listing = Listing.objects.get(id=list_id)
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        price = request.POST.get('price')
+        num_bedrooms = request.POST.get('num_bedrooms')
+        num_bathrooms = request.POST.get('num_bathrooms')
+        square_footage = request.POST.get('square_footage')
+        address = request.POST.get('address')
+        image = request.FILES.get('image')
+        listing.title = title
+        listing.price = price
+        listing.num_bedrooms = num_bedrooms
+        listing.num_bathrooms = num_bathrooms
+        listing.square_footage = square_footage
+        listing.address = address
+        listing.image = image
+        listing.save()
+        return redirect('listing')
 
+    return render(request, 'update_list.html', {'listing': listing})
+
+@login_required(login_url='login')
 def leads(request):
     if request.method == 'POST':
         date = request.POST.get('date')

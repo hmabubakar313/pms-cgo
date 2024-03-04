@@ -24,35 +24,31 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title">
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter title" value="{{ listing.title }}">
                     </div>
-                    {% comment %} <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea class="form-control" id="description" name="description" placeholder="Enter description"></textarea>
-                    </div> {% endcomment %}
                     <div class="form-group">
                         <label for="price">Price</label>
-                        <input type="number" class="form-control" id="price" name="price" placeholder="Enter price">
+                        <input type="number" class="form-control" id="price" name="price" placeholder="Enter price" value="{{ listing.price }}">
                     </div>
                     <div class="form-group">
                         <label for="num_bedrooms">Number of Bedrooms</label>
-                        <input type="number" class="form-control" id="num_bedrooms" name="num_bedrooms" placeholder="Enter number of bedrooms">
+                        <input type="number" class="form-control" id="num_bedrooms" name="num_bedrooms" placeholder="Enter number of bedrooms" value="{{ listing.num_bedrooms }}">
                     </div>
                     <div class="form-group">
                         <label for="num_bathrooms">Number of Bathrooms</label>
-                        <input type="number" class="form-control" id="num_bathrooms" name="num_bathrooms" placeholder="Enter number of bathrooms">
+                        <input type="number" class="form-control" id="num_bathrooms" name="num_bathrooms" placeholder="Enter number of bathrooms" value="{{ listing.num_bathrooms }}">
                     </div>
                     <div class="form-group">
                         <label for="square_footage">Square Footage</label>
-                        <input type="number" class="form-control" id="square_footage" name="square_footage" placeholder="Enter square footage">
+                        <input type="number" class="form-control" id="square_footage" name="square_footage" placeholder="Enter square footage" value="{{ listing.square_footage }}">
                     </div>
                     <div class="form-group">
                         <label for="location">Address</label>
-                        <input type="text" class="form-control" id="address" name="address" placeholder="Enter address">
+                        <input type="text" class="form-control" id="address" name="address" placeholder="Enter address" value="{{ listing.address }}">
                     </div>
                     <div class="form-group">
                         <label for="image">Image</label>
-                        <input type="file" class="form-control-file" id="image" name="image">
+                        <input type="file" class="form-control-file" id="image" name="image" value="{{ listing.image }}" multiple>
                     </div>
                 </div>
                 <!-- /.card-body -->

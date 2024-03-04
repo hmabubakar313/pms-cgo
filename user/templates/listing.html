@@ -8,7 +8,8 @@
             <div class="card">
                 <div class="card-header">
                   <h3 class="card-title"> 
-                    {% block heading %}Listing{% endblock  %}
+                {% block heading %}<a href="{% url 'create_listing' %}" class="btn btn-primary">Add Listing</a>
+                    {% endblock  %}
                   </h3>
                 </div>
                 <!-- /.card-header -->
@@ -22,7 +23,7 @@
                           <th>Number of Bathrooms</th>
                           <th>Square Footage</th>
                           <th>Address</th>
-                          <th>Image</th>
+                          {% comment %} <th>Image</th> {% endcomment %}
                           <th>Actions</th>
                       </tr>
                   </thead>
@@ -35,11 +36,13 @@
                         <td>{{ listing.num_bathrooms }}</td>
                         <td>{{ listing.square_footage }}</td>
                         <td>{{ listing.address }}</td>
-                        <td><img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="max-width: 100px;"></td>
+                        {% comment %} <td><img src="{{ listing.description }}"  style="max-width: 100px;"></td> {% endcomment %}
                         <td>
                             <a href="{% url 'view_list' listing.id %}" class="btn btn-primary">View</a>  
-                            <a href="" class="btn btn-warning">Update</a>
+                           
                             <a href="{% url 'delete_listing' listing.id %}" class="btn btn-danger">Delete</a>
+                            <a href="{% url 'update_listing' listing.id %}" class="btn btn-success">Update</a>
+                            
                         </td>
                     </tr>
                     {% endfor %}
