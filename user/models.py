@@ -53,7 +53,7 @@ class Image(models.Model):
     image = models.ImageField(upload_to='image/')
 
 
-class Brokers(models.Model):
+class Broker(models.Model):
     user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
     property_manager = models.ForeignKey('PropertyManager', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -61,11 +61,10 @@ class Brokers(models.Model):
 
 
 class Tenant(models.Model):
-    user = models.OneToOneField('CustomUser', on_delete=models.CASCADE)
-    property_manager = models.ForeignKey('PropertyManager', on_delete=models.CASCADE)
-    broker = models.ForeignKey('Brokers', on_delete=models.CASCADE, null=True, blank=True)
+    user = models.OneToOneField('CustomUser', related_name='tenant', on_delete=models.CASCADE)
+    property_manager = models.ForeignKey('PropertyManager', related_name='tenants', on_delete=models.CASCADE)
+    broker = models.ForeignKey('Broker', related_name='tenants', on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100)
-    listing = models.OneToOneField('Listing', on_delete=models.CASCADE, null=True, blank=True)
 
 
 class Lead(models.Model):
@@ -102,6 +101,8 @@ class Document(models.Model):
     title = models.CharField(max_length=100)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     listing = models.OneToOneField('Listing', on_delete=models.CASCADE)
+    tenant = models.OneToOneField('Tenant', on_delete=models.CASCADE)
+    property_manager = models.ForeignKey('PropertyManager', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
