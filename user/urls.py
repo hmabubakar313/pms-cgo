@@ -7,7 +7,10 @@ urlpatterns = [
     path('dashboard/',views.dashboard,name="dashboard"),
     path('login/',views.login,name="login"),
     path('signup/',views.signup,name="signup"),
-    path('table/',views.table,name="table")
+    path('listing/',views.listing,name="listing"),
+    path('create_listing/',views.create_listing,name="create_listing"),
+    path('view_list/<int:list_id>',views.view_list,name="view_list"),
+    path('delete_listing/<int:list_id>',views.delete_listing,name="delete_listing"),
     
 ]
 
