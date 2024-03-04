@@ -73,6 +73,35 @@ def signup(request):
         return render(request, 'signup.html')
 
 
-def table(request):
+# def create_listing(request):
+#     if request.method == 'POST':
+#         title = request.POST.get('title')
+#         description = request.POST.get('description')
+#         price = request.POST.get('price')
+#         location = request.POST.get('location')
+#         image = request.FILES['image']
+#         print(title,description,price,location,image,"create_listining")
+#         listing = Listing.objects.create(title=title,description=description,price=price,location=location,image=image)
+#         listing.save()
+#         return redirect('listing')
+#     else:
+#         return render(request,'create_list.html')
+
+
+def listing(request):
     listings = Listing.objects.all()
-    return render(request,'table.html',{'listings':listings})
+    return render(request,'listing.html',{'listings':listings})
+
+
+def view_list(request,list_id):
+    print(list_id,"list_id")
+    listing = Listing.objects.get(id=list_id)
+    print(listing,"listing")
+    return render(request,'view_list.html',{'listings':listing})
+
+
+def delete_listing(request,list_id):
+    listing = Listing.objects.get(id=list_id)
+    listing.delete()
+    return redirect('listing')
+

@@ -23,26 +23,26 @@
                           <th>Square Footage</th>
                           <th>Address</th>
                           <th>Image</th>
-                          <th>Actions</th>
+                          {% comment %} <th>Actions</th> {% endcomment %}
                       </tr>
                   </thead>
                   <tbody>
-                    {% for listing in listings %}
+                 
                     <tr>
-                        <td>{{ listing.title }}</td>
-                        <td>{{ listing.price }}</td>
-                        <td>{{ listing.num_bedrooms }}</td>
-                        <td>{{ listing.num_bathrooms }}</td>
-                        <td>{{ listing.square_footage }}</td>
-                        <td>{{ listing.address }}</td>
-                        <td><img src="{{ listing.image.url }}" alt="{{ listing.title }}" style="max-width: 100px;"></td>
-                        <td>
+                        <td>{{ listings.title }}</td>
+                        <td>{{ listings.price }}</td>
+                        <td>{{ listings.num_bedrooms }}</td>
+                        <td>{{ listings.num_bathrooms }}</td>
+                        <td>{{ listings.square_footage }}</td>
+                        <td>{{ listings.address }}</td>
+                        <td><img src="{{ listings.image.url }}" alt="{{ listing.title }}" style="max-width: 100px;"></td>
+                        {% comment %} <td>
                             <a href="" class="btn btn-primary">View</a>
                             <a href="" class="btn btn-warning">Update</a>
                             <a href="" class="btn btn-danger">Delete</a>
-                        </td>
+                        </td> {% endcomment %}
                     </tr>
-                    {% endfor %}
+                   
                 </tbody>
                     {% comment %} <tfoot>
                     <tr>
