@@ -36,6 +36,7 @@
                         <td>{{ listing.num_bathrooms }}</td>
                         <td>{{ listing.square_footage }}</td>
                         <td>{{ listing.address }}</td>
+                        
                         {% comment %} <td><img src="{{ listing.description }}"  style="max-width: 100px;"></td> {% endcomment %}
                         <td>
                             <a href="{% url 'view_list' listing.id %}" class="btn btn-primary">View</a>  

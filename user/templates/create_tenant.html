@@ -18,7 +18,7 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form action="{% url 'create_tenant' %}" method="post">
+            <form action="{% url 'create_tenant' %}" method="POST">
               {% csrf_token %}
               <div class="card-body">
                   <div class="form-group">

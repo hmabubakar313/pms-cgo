@@ -17,7 +17,9 @@ urlpatterns = [
     path('update_lead/<lead_id>/',views.update_lead,name="update_lead"),
     path('delete_lead/<lead_id>/',views.delete_lead,name="delete_lead"),
     path('create_tenant/',views.create_tenant,name="create_tenant"),
-    path('list_tenants/',views.get_tenant_list,name="list_tenants"),
+    path('list_tenants/',views.list_tenants,name="list_tenants"),
+    path('delete_tenant/<tenant_id>/',views.delete_tenant,name="delete_tenant"),
+    path('update_tenant/<tenant_id>/',views.update_tenant,name="update_tenant"),
     
 ]
 

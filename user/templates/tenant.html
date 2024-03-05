@@ -18,23 +18,20 @@
                     <thead>
                       <tr>
                           <th>Name</th>
-                         
+                          <th>Actions</th>
                       </tr>
                   </thead>
                   <tbody>
                     {% for tenant in tenants %}
                     <tr>
-                        <td>{{ tenant.name }}</td>
+                        <td>{{ tenant.name  }}</td>
+                         
+                        <td>
+                          <a href="{% url 'delete_tenant' tenant.id %}" class="btn btn-danger">Delete</a>
                         
                         
-                        {% comment %} <td><img src="{{ listing.description }}"  style="max-width: 100px;"></td> {% endcomment %}
-                        {% comment %} <td>
-                            <a href="{% url 'view_list' listing.id %}" class="btn btn-primary">View</a>  
-                           
-                            <a href="{% url 'delete_listing' listing.id %}" class="btn btn-danger">Delete</a>
-                            <a href="{% url 'update_listing' listing.id %}" class="btn btn-success">Update</a>
-                            
-                        </td> {% endcomment %}
+                          <a href="{% url 'update_tenant' tenant.id %}" class="btn btn-primary">Update</a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
