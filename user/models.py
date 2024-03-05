@@ -64,6 +64,8 @@ class Tenant(models.Model):
     property_manager = models.ForeignKey('PropertyManager', related_name='tenants', on_delete=models.CASCADE)
     broker = models.ForeignKey('Broker', related_name='tenants', on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100)
+    address = models.CharField(max_length=100, required=False)
+    phone_number = models.CharField(max_length=20, required=False)
 
 
 class Lead(models.Model):
@@ -78,6 +80,7 @@ class Lead(models.Model):
     person_in_charge = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     tenant_met = models.OneToOneField('Tenant', on_delete=models.CASCADE, blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"Lead on {self.date} (Status: {self.status})"
@@ -87,6 +90,8 @@ class ContractAgreement(models.Model):
     commission_rate = models.DecimalField(max_digits=3, decimal_places=2, validators=[MinValueValidator(0), MaxValueValidator(1)])
     broker = models.OneToOneField('Broker', on_delete=models.CASCADE)
     property_manager = models.ForeignKey('PropertyManager', on_delete=models.CASCADE)
+    listing = models.OneToOneField('Listing', on_delete=models.CASCADE)
+    tenant = models.OneToOneField('Tenant', on_delete=models.CASCADE)
 
 
 class Document(models.Model):
@@ -99,10 +104,7 @@ class Document(models.Model):
     document_type = models.CharField(max_length=20, choices=DOCUMENT_TYPES)
     title = models.CharField(max_length=100)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    listing = models.OneToOneField('Listing', on_delete=models.CASCADE)
-    tenant = models.OneToOneField('Tenant', on_delete=models.CASCADE)
-    property_manager = models.ForeignKey('PropertyManager', on_delete=models.CASCADE)
+    upload = models.FileField(upload_to='documents/')
 
     def __str__(self):
         return self.title
-
