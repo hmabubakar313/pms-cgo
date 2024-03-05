@@ -38,7 +38,7 @@ class Listing(models.Model):
     Tenant = models.ForeignKey('Tenant', on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(max_length=100)
     price = models.IntegerField()
-    num_bedrooms = models.IntegerField(  validators=[MinValueValidator(0)])
+    num_bedrooms = models.IntegerField(validators=[MinValueValidator(0)])
     num_bathrooms = models.IntegerField()
     square_footage = models.IntegerField()
     address = models.CharField(max_length=100)
@@ -76,7 +76,7 @@ class Lead(models.Model):
         ('Canceled', 'Canceled'),
     )
 
-    date = models.DateField()
+    datetime = models.DateTimeField()
     person_in_charge = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     tenant_met = models.OneToOneField('Tenant', on_delete=models.CASCADE, blank=True, null=True)

@@ -21,9 +21,10 @@ urlpatterns = [
     path('delete_tenant/<tenant_id>/',views.delete_tenant,name="delete_tenant"),
     path('update_tenant/<tenant_id>/',views.update_tenant,name="update_tenant"),
     path('broker_list/',views.broker_list,name="broker_list"),
-    path('create_broker/',views.create_broker,name="create_broker"),
+    path('create_broker/', views.create_broker,name="create_broker"),
     path("delete_broker/<broker_id>/",views.delete_broker,name="delete_broker"),
     path("update_broker/<broker_id>/",views.update_broker,name="update_broker"),
+    path('', views.home, name='home'),
     
 ]
 
