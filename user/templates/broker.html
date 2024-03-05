@@ -34,8 +34,8 @@
                         <td>
                               
                            
-                            <a href="" class="btn btn-danger">Delete</a>
-                            <a href="" class="btn btn-success">Update</a>
+                            <a href="{% url "delete_broker" broker.id %}" class="btn btn-danger">Delete</a>
+                            <a href="{% url "update_broker" broker.id %}" class="btn btn-primary">Update</a>
                             
                         </td> 
                     </tr>

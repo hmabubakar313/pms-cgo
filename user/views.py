@@ -309,6 +309,7 @@ def update_broker(request, broker_id):
         return redirect('broker_list')
         # if form.is_valid():
         #     form.save()
+    return render(request, 'update_broker.html', {'broker': broker})
 
 
 def broker_list(request):
