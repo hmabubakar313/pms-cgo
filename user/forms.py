@@ -16,6 +16,13 @@ class CustomUserChangeForm(UserChangeForm):
         fields = ("email",)
 
 
+class UserForm(forms.ModelForm):
+
+    class Meta:
+        model = CustomUser
+        fields = ("email", "password")
+
+
 class TenantsForm(forms.ModelForm):
     email = forms.EmailField()
     password = forms.CharField()
@@ -23,7 +30,7 @@ class TenantsForm(forms.ModelForm):
     class Meta:
         model = Tenant
         fields = ["email", "password", "name"]
-        exclude = ['user', 'broker', 'property_manager']
+        exclude = ['broker', 'property_manager']
 
 
 class BrokerForm(forms.ModelForm):

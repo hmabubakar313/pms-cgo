@@ -8,7 +8,7 @@ from datetime import datetime
 from django.utils.dateparse import parse_date
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from .forms import TenantsForm, CustomUserCreationForm
+from .forms import TenantsForm, CustomUserCreationForm, UserForm, BrokerForm
 from django.forms import inlineformset_factory
 
 
@@ -222,33 +222,34 @@ def list_tenants(request):
 
 
 def create_tenant(request):
+    # Ensure property manager is associated with the current user
     property_manager = PropertyManager.objects.get(user=request.user)
-    print("in the create", request.method)
+    
     if request.method == 'POST':
-        form = TenantsForm(request.POST)
-        if form.is_valid():
-            print('form is valid')
-            tenant = form.save(commit=False)
+        # Populate both tenant and user form data from the request
+        tenant_form = TenantsForm(request.POST)
+        user_form = UserForm(request.POST)
+        print("tenantform:", request.POST)
+        # Check if both forms are valid
+        if tenant_form.is_valid() and user_form.is_valid():
+            # Save the user first
+            user = user_form.save()
+            
+            # Save the tenant associated with the property manager and user
+            tenant = tenant_form.save(commit=False)
             tenant.property_manager = property_manager
-            post_data = request.POST.copy()
-            post_data.pop('name', None) 
-            user_form = CustomUserCreationForm(post_data)
-            if user_form.is_valid():
-                print('user form is valid')
-                user = user_form.save()
-                tenant.user = user
-                tenant.save()
-                # Retrieve all tenants
-                all_tenants = Tenant.objects.all()
-                # Render the HTML page with all tenants
-                return redirect('list_tenants')
-            else:
-                print('User email or password is invalid')
-                return HttpResponse("User email or password is invalid")
+            tenant.user = user
+            tenant.save()
+            
+            # Redirect to the list of tenants
+            return redirect('list_tenants')
+        else:
+            print("User form errors:", user_form.errors)
     else:
-        print('form is invalid----------------')
-        form = TenantsForm()
-    return render(request, 'create_tenant.html', {'form': form})
+        tenant_form = TenantsForm()
+        user_form = CustomUserCreationForm()
+    
+    return render(request, 'create_tenant.html', {'tenant_form': tenant_form, 'user_form': user_form})
 
 
 def delete_tenant(request, tenant_id):
@@ -270,7 +271,6 @@ def get_tenant_list(request):
     return render(request, 'tenant.html', {'tenant': tenant})
 
 
-
 def retrieve_tenant(request, tenant_id):
     return Tenant.objects.get(id=tenant_id)
 
@@ -278,7 +278,7 @@ def retrieve_tenant(request, tenant_id):
 def create_broker(request):
     property_manager = PropertyManager.objects.get(user=request.user)
     if request.method == 'POST':
-        form = TenantsForm(request.POST)
+        form = BrokerForm(request.POST)
         if form.is_valid():
             tenant = form.save(commit=False)
             tenant.property_manager = property_manager
@@ -300,7 +300,7 @@ def delete_broker(request, broker_id):
 def update_broker(request, broker_id):
     broker = Broker.objects.get(id=broker_id)
     if request.method == 'POST' and broker_id:
-        form = TenantsForm(request.POST, instance=broker)
+        form = BrokerForm(request.POST, instance=broker)
         if form.is_valid():
             form.save()
 
