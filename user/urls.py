@@ -8,7 +8,7 @@ urlpatterns = [
     path('login/',views.login,name="login"),
     path('signup/',views.signup,name="signup"),
     path('listing/',views.listing,name="listing"),
-    # path('create_listing/',views.create_listing,name="create_listing"),
+    path('create_listing/',views.create_listing,name="create_listing"),
     path('view_list/<int:list_id>',views.view_list,name="view_list"),
     path('delete_listing/<int:list_id>',views.delete_listing,name="delete_listing"),
     path('update_listing/<int:list_id>',views.update_listing,name="update_listing"),
@@ -16,6 +16,8 @@ urlpatterns = [
     path('list_leads/',views.list_leads,name="list_leads"),
     path('update_lead/<lead_id>/',views.update_lead,name="update_lead"),
     path('delete_lead/<lead_id>/',views.delete_lead,name="delete_lead"),
+    path('create_tenant/',views.create_tenant,name="create_tenant"),
+    path('list_tenants/',views.get_tenant_list,name="list_tenants"),
     
 ]
 

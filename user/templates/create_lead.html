@@ -39,10 +39,17 @@
                             <option value="Canceled">Canceled</option>
                         </select>
                     </div>
-                    {% comment %} <div class="form-group">
-                        <label for="tenant_met">Tenant Met</label>
-                        <input type="text" class="form-control" id="tenant_met" name="tenant_met" placeholder="Enter tenant met">
-                    </div> {% endcomment %}
+                    <div class="form-group">
+                        <label for="phone">Select Tenant </label>
+                        <select class="form-control" name="tenant" id="tenant">
+                          <option value="">Select Tenant</option>
+                          {{tenants}}
+                          {% for tenant in tenants %}
+                          
+                          <option value="{{tenant.id}}">{{tenant.name}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
                 </div>
                 <!-- /.card-body -->
                 
