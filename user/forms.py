@@ -39,5 +39,5 @@ class BrokerForm(forms.ModelForm):
 
     class Meta:
         model = Broker
-        fields = ["email", "password", "name"]
+        fields = ["email", "password", "name", "commission_rate"]
         exclude = ['user', 'broker', 'property_manager']

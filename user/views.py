@@ -8,7 +8,7 @@ from datetime import datetime
 from django.utils.dateparse import parse_date
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from .forms import TenantsForm, CustomUserCreationForm, UserForm
+from .forms import TenantsForm, CustomUserCreationForm, UserForm, BrokerForm
 from django.forms import inlineformset_factory
 
 
@@ -49,7 +49,6 @@ def signup(request):
         password = request.POST.get('password')
         retype_password = request.POST.get('retype_password')
         terms_agreed = request.POST.get('terms')
-        print(username, email, password, retype_password, terms_agreed, "signup")
 
         # Check if passwords match
         if password != retype_password:
@@ -60,11 +59,9 @@ def signup(request):
         try:
             # Create a new user
             user = CustomUser.objects.create_user(email=email, password=password)      
-            print(user, "user")
             user.save()
             property_manager = PropertyManager.objects.create(user=user, username=username)
             property_manager.save()
-            print(property_manager, "property_manager")
             messages.success(request, 'Account created successfully.')
 
             return redirect('login')
@@ -88,11 +85,9 @@ def create_listing(request):
         square_footage = request.POST.get('square_footage')
         address = request.POST.get('address')
 
-        print(request.user,"request.user")
         property_manager = PropertyManager.objects.get(user=request.user)
 
         image_file = request.FILES.get('image')
-        # print("image",image)
         image_instance = Image.objects.create(image=image_file)
 
         # Create the Listing object
@@ -125,9 +120,7 @@ def listing(request):
 
 @login_required(login_url='login')
 def view_list(request,list_id):
-    print(list_id,"list_id")
     listing = Listing.objects.get(id=list_id)
-    print(listing,"listing")
     return render(request,'view_list.html',{'listings':listing})
 
 
@@ -229,7 +222,6 @@ def create_tenant(request):
         # Populate both tenant and user form data from the request
         tenant_form = TenantsForm(request.POST)
         user_form = UserForm(request.POST)
-        print("tenant form:", request.POST)
         # Check if both forms are valid
         if tenant_form.is_valid() and user_form.is_valid():
             # Save the user first
@@ -258,14 +250,12 @@ def delete_tenant(request, tenant_id):
 def update_tenant(request, tenant_id):
     tenant = Tenant.objects.get(id=tenant_id)
     if request.method == 'POST':
-        print("in the post")
         tenant.name = request.POST.get('name')
         tenant.email = request.POST.get('email')
         tenant.password = request.POST.get('password')
         tenant.save()
         return redirect('list_tenants')
     else:
-        print("in the else")
         return render(request, 'update_tenant.html', {'tenant': tenant})
 
 
@@ -275,19 +265,36 @@ def update_tenant(request, tenant_id):
 
 
 def create_broker(request):
+    # Ensure property manager is associated with the current user
     property_manager = PropertyManager.objects.get(user=request.user)
+    
     if request.method == 'POST':
-        form = TenantsForm(request.POST)
-        if form.is_valid():
-            tenant = form.save(commit=False)
-            tenant.property_manager = property_manager
-            user_form = CustomUserCreationForm(request.POST)
-            if user_form.is_valid():
-                user = user_form.save()
-            else:
-                return "User email or password is invalid"
-            tenant.user = user
-            tenant.save()
+        print("Request POST data:", request.POST)
+        # Populate both broker and user form data from the request
+        broker_form = BrokerForm(request.POST)
+        user_form = UserForm(request.POST)
+        
+        # Check if both forms are valid
+        if broker_form.is_valid() and user_form.is_valid():
+            print("Broker form data:")
+            # Save the user first
+            user = user_form.save()
+            # Save the broker associated with the property manager and user
+            broker = broker_form.save(commit=False)
+            broker.property_manager = property_manager
+            broker.user = user
+            broker.save()
+            # Redirect to the list of brokers
+            return redirect('broker_list')
+        else:
+            print("User form errors:", user_form.errors)
+    else:
+        print("in the else")
+        broker_form = BrokerForm()
+        user_form = CustomUserCreationForm()
+        
+    return render(request, 'create_broker.html', {'broker_form': broker_form, 'user_form': user_form})
+
 
 
 def delete_broker(request, broker_id):
@@ -304,8 +311,9 @@ def update_broker(request, broker_id):
             form.save()
 
 
-def get_broker_list(request):
-    return Broker.objects.all()
+def broker_list(request):
+    brokers = Broker.objects.all()
+    return render(request, 'broker.html', {'brokers': brokers})
 
 
 def retrieve_broker(request, broker_id):

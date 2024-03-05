@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Broker{% endblock %}
+{% block content %}
+<section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title"> 
+                {% block heading %}<a href="{% url 'create_broker' %}" class="btn btn-primary">Add Broker</a>
+                    {% endblock  %}
+                  </h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                          <th>Name</th>
+                          <th>Commission Rate</th>
+                          {% comment %} <th>Image</th> {% endcomment %}
+                          <th>Actions</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for broker in brokers %}
+                    <tr>
+                        <td>{{ broker.name }}</td>
+                        <td>{{ broker.commission_rate }}</td>
+                         
+                        
+                        {% comment %} <td><img src="{{ listing.description }}"  style="max-width: 100px;"></td> {% endcomment %}
+                        <td>
+                              
+                           
+                            <a href="" class="btn btn-danger">Delete</a>
+                            <a href="" class="btn btn-success">Update</a>
+                            
+                        </td> 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                    {% comment %} <tfoot>
+                    <tr>
+                      <th>Rendering engine</th>
+                      <th>Browser</th>
+                      <th>Platform(s)</th>
+                      <th>Engine version</th>
+                      <th>CSS grade</th>
+                    </tr>
+                    </tfoot> {% endcomment %}
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+        </div>
+    </div>
+</div>
+<section>
+
+{% endblock  %}
+
+ 

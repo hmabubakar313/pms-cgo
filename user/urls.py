@@ -20,6 +20,8 @@ urlpatterns = [
     path('list_tenants/',views.list_tenants,name="list_tenants"),
     path('delete_tenant/<tenant_id>/',views.delete_tenant,name="delete_tenant"),
     path('update_tenant/<tenant_id>/',views.update_tenant,name="update_tenant"),
+    path('broker_list/',views.broker_list,name="broker_list"),
+    path('create_broker/',views.create_broker,name="create_broker"),
     
 ]
 
