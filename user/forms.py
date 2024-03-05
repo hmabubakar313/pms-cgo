@@ -29,7 +29,7 @@ class TenantsForm(forms.ModelForm):
 
     class Meta:
         model = Tenant
-        fields = ["email", "password", "name"]
+        fields = ["email", "password", "name", "address", "phone_number"]
         exclude = ['broker', 'property_manager']
 
 

@@ -18,6 +18,9 @@
                     <thead>
                       <tr>
                           <th>Name</th>
+                          <th>Address</th>
+                          <th>Phone Number</th>
+                          <th>Email</th>
                           <th>Actions</th>
                       </tr>
                   </thead>
@@ -25,6 +28,9 @@
                     {% for tenant in tenants %}
                     <tr>
                         <td>{{ tenant.name  }}</td>
+                        <td>{{ tenant.address }}</td>
+                        <td>{{ tenant.phone_number }}</td>
+                        <td>{{ tenant.user.email }}</td>
                          
                         <td>
                           <a href="{% url 'delete_tenant' tenant.id %}" class="btn btn-danger">Delete</a>
