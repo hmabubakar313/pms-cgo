@@ -64,8 +64,8 @@ class Tenant(models.Model):
     property_manager = models.ForeignKey('PropertyManager', related_name='tenants', on_delete=models.CASCADE)
     broker = models.ForeignKey('Broker', related_name='tenants', on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100)
-    address = models.CharField(max_length=100, required=False)
-    phone_number = models.CharField(max_length=20, required=False)
+    address = models.CharField(max_length=100, blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
 
 
 class Lead(models.Model):

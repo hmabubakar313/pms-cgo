@@ -181,8 +181,9 @@ def create_lead(request):
         person_in_charge = request.POST.get('person_in_charge')
         status = request.POST.get('status')
         tenant_met_id = request.POST.get('tenant')
+        notes = request.POST.get('notes')
 
-        lead = Lead.objects.create(date=date, person_in_charge=person_in_charge, status=status, tenant_met_id=tenant_met_id)
+        Lead.objects.create(date=date, person_in_charge=person_in_charge, status=status, tenant_met_id=tenant_met_id, notes=notes)
         return redirect('list_leads')  # Redirect to wherever you want
     else:
         return render(request, 'create_lead.html')
