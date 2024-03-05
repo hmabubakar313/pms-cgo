@@ -259,11 +259,6 @@ def update_tenant(request, tenant_id):
         return render(request, 'update_tenant.html', {'tenant': tenant})
 
 
-
-
-
-
-
 def create_broker(request):
     # Ensure property manager is associated with the current user
     property_manager = PropertyManager.objects.get(user=request.user)
@@ -296,19 +291,24 @@ def create_broker(request):
     return render(request, 'create_broker.html', {'broker_form': broker_form, 'user_form': user_form})
 
 
-
 def delete_broker(request, broker_id):
-    if request.method == 'POST' and broker_id:
-        broker = Broker.objects.get(id=broker_id)
-        broker.delete()
+    broker = get_object_or_404(Broker, id=broker_id)
+    broker.delete()
+    return redirect('broker_list')
 
 
 def update_broker(request, broker_id):
     broker = Broker.objects.get(id=broker_id)
     if request.method == 'POST' and broker_id:
         form = TenantsForm(request.POST, instance=broker)
-        if form.is_valid():
-            form.save()
+        broker.name = request.POST.get('name')
+        broker.email = request.POST.get('email')
+        broker.password = request.POST.get('password')
+        broker.password = request.POST.get('commission_rate')
+        broker.save()
+        return redirect('broker_list')
+        # if form.is_valid():
+        #     form.save()
 
 
 def broker_list(request):
