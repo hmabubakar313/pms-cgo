@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
-from .models import CustomUser, Tenant
+from .models import CustomUser, Tenant, Broker
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -22,7 +22,15 @@ class TenantsForm(forms.ModelForm):
 
     class Meta:
         model = Tenant
-        fields = ["email", "password", "property_manager", "broker", "name"]
+        fields = ["email", "password", "name"]
         exclude = ['user', 'broker', 'property_manager']
 
 
+class BrokerForm(forms.ModelForm):
+    email = forms.EmailField()
+    password = forms.CharField()
+
+    class Meta:
+        model = Broker
+        fields = ["email", "password", "name"]
+        exclude = ['user', 'broker', 'property_manager']

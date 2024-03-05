@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login as dj_login
-from .models import PropertyManager, CustomUser, Listing, Image, Lead, Tenant
+from .models import PropertyManager, CustomUser, Listing, Image, Lead, Tenant, Broker
 from django.contrib import messages
 from datetime import datetime
 from django.utils.dateparse import parse_date
@@ -76,6 +76,7 @@ def signup(request):
         # If not a POST request, render the signup page
         return render(request, 'signup.html')
 
+
 @login_required(login_url='login')
 def create_listing(request):
     if request.method == 'POST':
@@ -102,7 +103,7 @@ def create_listing(request):
             num_bathrooms=num_bathrooms,
             square_footage=square_footage,
             address=address,
-           
+         
         )
         listing.image.add(image_instance)
         listing.save()
@@ -120,12 +121,14 @@ def listing(request):
     listings = Listing.objects.all()
     return render(request, 'listing.html', {'listings': listings})
 
+
 @login_required(login_url='login')
 def view_list(request,list_id):
     print(list_id,"list_id")
     listing = Listing.objects.get(id=list_id)
     print(listing,"listing")
     return render(request,'view_list.html',{'listings':listing})
+
 
 @login_required(login_url='login')
 def delete_listing(request, list_id):
@@ -176,8 +179,7 @@ def create_lead(request):
         date = request.POST.get('date')
         person_in_charge = request.POST.get('person_in_charge')
         status = request.POST.get('status')
-
-        lead = Lead.objects.create(date=date, person_in_charge=person_in_charge, status=status, tenant_met_id=tenant_met_id)
+        Lead.objects.create(date=date, person_in_charge=person_in_charge, status=status, tenant_met=tenant_met)
         return redirect('list_leads')  # Redirect to wherever you want
     else:
         return render(request, 'create_lead.html')
@@ -186,6 +188,7 @@ def create_lead(request):
 def list_leads(request):
     leads = Lead.objects.all()
     return render(request, 'leeds.html', {'leads': leads})
+
 
 # # Update
 def update_lead(request, lead_id):
@@ -208,10 +211,12 @@ def delete_lead(request, lead_id):
 
 
 def create_tenant(request):
+    property_manager = PropertyManager.objects.get(user=request.user)
     if request.method == 'POST':
         form = TenantsForm(request.POST)
         if form.is_valid():
             tenant = form.save(commit=False)
+            tenant.property_manager = property_manager
             user_form = CustomUserCreationForm(request.POST)
             if user_form.is_valid():
                 user = user_form.save()
@@ -225,9 +230,7 @@ def delete_tenant(request, tenant_id):
     if request.method == 'POST' and tenant_id:
         tenant = Tenant.objects.get(id=tenant_id)
         tenant.delete()
-    # else:
-    #     return "tenant id n"
-        
+
 
 def update_tenant(request, tenant_id):
     tenant = Tenant.objects.get(id=tenant_id)
@@ -243,3 +246,41 @@ def get_tenant_list(request):
 
 def retrieve_tenant(request, tenant_id):
     return Tenant.objects.get(id=tenant_id)
+
+
+def create_broker(request):
+    property_manager = PropertyManager.objects.get(user=request.user)
+    if request.method == 'POST':
+        form = TenantsForm(request.POST)
+        if form.is_valid():
+            tenant = form.save(commit=False)
+            tenant.property_manager = property_manager
+            user_form = CustomUserCreationForm(request.POST)
+            if user_form.is_valid():
+                user = user_form.save()
+            else:
+                return "User email or password is invalid"
+            tenant.user = user
+            tenant.save()
+
+
+def delete_broker(request, broker_id):
+    if request.method == 'POST' and broker_id:
+        broker = Broker.objects.get(id=broker_id)
+        broker.delete()
+
+
+def update_broker(request, broker_id):
+    broker = Broker.objects.get(id=broker_id)
+    if request.method == 'POST' and broker_id:
+        form = TenantsForm(request.POST, instance=broker)
+        if form.is_valid():
+            form.save()
+
+
+def get_broker_list(request):
+    return Broker.objects.all()
+
+
+def retrieve_broker(request, broker_id):
+    return Broker.objects.get(id=broker_id)
