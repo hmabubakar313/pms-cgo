@@ -3,6 +3,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .managers import CustomUserManager
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
 
 class CustomUser(AbstractUser):
@@ -102,6 +104,58 @@ class Lead(models.Model):
 
     def __str__(self):
         return f"Lead on {self.date} (Status: {self.status})"
+
+
+@receiver(post_save, sender=Lead)
+def create_lead_history_on_save(sender, instance, created, **kwargs):
+    if created:
+        # If a new Lead instance is created, create a new LeadHistory instance
+        LeadHistory.objects.create(
+            lead=instance,
+            meeting_datetime=instance.datetime,
+            person_in_charge=instance.person_in_charge,
+            status=instance.status,
+            tenant_met=instance.tenant_met,
+            notes=instance.notes,
+        )
+    else:
+        # If an existing Lead instance is updated, create a new LeadHistory instance
+        LeadHistory.objects.create(
+            lead=instance,
+            meeting_datetime=instance.datetime,
+            person_in_charge=instance.person_in_charge,
+            status=instance.status,
+            tenant_met=instance.tenant_met,
+            notes=instance.notes,
+        )
+
+
+@receiver(post_delete, sender=Lead)
+def create_lead_history_on_delete(sender, instance, **kwargs):
+    # If a Lead instance is deleted, create a new LeadHistory instance
+    LeadHistory.objects.create(
+        lead=instance,
+        meeting_datetime=instance.datetime,
+        person_in_charge=instance.person_in_charge,
+        status=instance.status,
+        tenant_met=instance.tenant_met,
+        notes=instance.notes,
+    )
+
+
+class LeadHistory(models.Model):
+    lead = models.ForeignKey(Lead, on_delete=models.CASCADE)
+    meeting_datetime = models.DateTimeField()
+    history_created_at = models.DateTimeField(auto_now_add=True)
+    person_in_charge = models.EmailField(_("email address"))
+    status = models.CharField(max_length=20, choices=Lead.STATUS_CHOICES)
+    tenant_met = models.ForeignKey(
+        "Tenant", on_delete=models.SET_NULL, blank=True, null=True
+    )
+    notes = models.TextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Lead Histories"
 
 
 class ContractAgreement(models.Model):
