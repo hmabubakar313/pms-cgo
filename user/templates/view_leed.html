@@ -1,109 +1,131 @@
 {% extends "base.html" %}
-{% block title %}Table{% endblock %}
+
+
+
+{% block title %} Leads {% endblock %}
 {% block content %}
 <section class="content">
-
-  <!-- Default box -->
-  <div class="card">
-    <div class="card-header">
-      <h3 class="card-title">Lead Detail</h3>
-
-      <div class="card-tools">
-        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-          <i class="fas fa-minus"></i>
-        </button>
-        <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-    </div>
+  <div class="container-fluid">
     <div class="row">
-      <div class="col-12">
-        <h4></h4>
-          <div class="post">
-            <div class="user-block">
-              {% comment %} <span class="username">
-                {% if listings.image.all %}
-                {% for image in listings.image.all %}
-                <img class="img-circle mr-2" src="{{ image.image.url }}" alt="User Image">
-                {% endfor %}
-                {% endif %}
-                <a href="#">{{ listings.property_manager }}</a>
-                
-              </span> {% endcomment %}
+      
+      <!-- /.col -->
+      <div class="col-md-9">
+        <div class="card">
+          <div class="card-header p-2">
+            <ul class="nav nav-pills">
+              <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Leads Listning</a></li>
+              {% comment %} <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Tenant Details</a></li> {% endcomment %}
+              {% comment %} <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li> {% endcomment %}
+            </ul>
+          </div><!-- /.card-header -->
+          <div class="card-body">
+            <div class="tab-content">
+              <div class="active tab-pane" id="activity">
+                <!-- Post -->
+                <div class="card-body">
+                  <div class="tab-content">
+                    <div class="active tab-pane" id="activity">
+                      <!-- Post -->
+                      <div class="post">
+                        <div class="user-block">
+                          <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                              <tr>
+                                  <th>Status</th>
+                                  <th>Date Time</th>
+                                  <th>Person In Charge</th>
+                                  <th>Tenet Met </th>
+                                  <th>Notes</th>
+                                 
+                              </tr>
+                          </thead>
+                          <tbody>
+                           
+                            <tr>
+                                <td>{{ lead.status }}</td>
+                                <td>{{ lead.datetime | date:"d-m-Y" }}</td>
+                                <td>{{ lead.person_in_charge }}</td>
+                                <td>{{ lead.tenant_met.name }}</td>
+                                <td>{{ lead.notes }}</td>
+                              
+                                
+                                {% comment %} <td><img src="{{ listing.description }}"  style="max-width: 100px;"></td> {% endcomment %}
+                              
+                            </tr>
+                           
+                        </tbody>
+                        </table>
+                        </div>
+                        <!-- /.user-block -->
+                      </div>
+                <!-- /.post -->
+              </div>
+              <!-- /.tab-pane -->
+              <div class="tab-pane" id="timeline">
+                <!-- The timeline -->
+                <div class="tab-pane" id="timeline">
+                  <!-- The timeline -->
+                  <div class="">
+                    <!-- timeline time label -->
+                    <div class="card-body">
+                      
+                      
+                          <div class="active tab-pane" id="AboutTenant">
+                              <div class="row">
+                                  <div class="col-md-6">
+                                      <div class="card card-primary">
+                                          <div class="card-header">
+                                              <h3 class="card-title">About Tenant</h3>
+                                          </div>
+                                          <!-- /.card-header -->
+                                          {% comment %} {% for tenant in tenants  %}
+                                          <div class="card-body">
+                                            <strong><i class="fas fa-book mr-1"></i> User 
+                                                </strong>
+                                            <p class="text-muted">{{tenant.user}}</p>
+                                            <hr>
+                                            <strong><i class="fas fa-map-marker-alt mr-1"></i>Address</strong>
+                                            <p class="text-muted">{{tenant.address}}</p>
+                                            <hr>
+                                            <strong><i class="fas fa-far fa-user mr-1"></i> Name</strong>
+                                            <p class="text-muted">{{tenant.name}}</p>
+                                            <hr>
+                                            <strong><i class="fas fa-fas fa-person-booth mr-1"></i>Broker</strong>
+                                            <p class="text-muted">{{tenant.broker}}</p>
+                                            <hr>
+                                            <strong><i class="far fa-fas fa-fas fa-phone mr-1"></i>Phone Number</strong>
+                                            <p class="text-muted">{{tenant.phone_number}}</p>
+                                            <hr>
+                                        </div>
+                                          {% endfor %} {% endcomment %}
+                                          <!-- /.card-body -->
+                                      </div>
+                                      <!-- /.card -->
+                                  </div>
+                                  <!-- /.col -->
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+              <!-- /.tab-pane -->
 
+             
+              <!-- /.tab-pane -->
            
-              
-            </div>
-            <!-- /.user-block -->
-           
-
-            
-          </div>
-
-          
-
-          
-      </div>
-    </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
-          <div class="row">
-            <div class="col-12 col-sm-4">
-              <div class="info-box bg-light">
-                <div class="info-box-content">
-                  <span class="info-box-text text-center text-muted">Status</span>
-                  <span class="info-box-number text-center text-muted mb-0">{{ lead.status }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-sm-4">
-              <div class="info-box bg-light">
-                <div class="info-box-content">
-                  <span class="info-box-text text-center text-muted">Date</span>
-                  <span class="info-box-number text-center text-muted mb-0">{{ lead.date }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-sm-4">
-              <div class="info-box bg-light">
-                <div class="info-box-content">
-                  <span class="info-box-text text-center text-muted">Person In Charge</span>
-                  <span class="info-box-number text-center text-muted mb-0">{{ lead.person_in_charge }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-sm-4">
-              <div class="info-box bg-light">
-                <div class="info-box-content">
-                  <span class="info-box-text text-center text-muted">Tenant Met</span>
-                  <span class="info-box-number text-center text-muted mb-0">{{ lead.tenant_met  }}</span>
-                </div>
-              </div>
-            </div>
-           
-            
-         
-            <div class="col-12 col-sm-4">
-                <div class="info-box bg-light">
-                  <div class="info-box-content">
-                    <span class="info-box-text text-center text-muted">Notes</span>
-                    <span class="info-box-number text-center text-muted mb-0">{{ lead.notes }}</span>
-                  </div>
-                </div>
-              </div>
-          </div>
-         
+            <!-- /.tab-content -->
+          </div><!-- /.card-body -->
         </div>
-        
+        <!-- /.card -->
       </div>
+      <!-- /.col -->
     </div>
-    <!-- /.card-body -->
-  </div>
-  <!-- /.card -->
-
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
 </section>
+
+ 
 {% endblock  %}
 
  

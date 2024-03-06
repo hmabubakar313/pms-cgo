@@ -194,9 +194,12 @@ def create_lead(request):
             notes=notes,
         )
 
-        return redirect("list_leads")  # Redirect to wherever you want
-    else:
-        return render(request, "create_lead.html")
+        return redirect("list_leads")
+    tenants = Tenant.objects.all()
+    context = {
+        'tenants': tenants
+    }
+    return render(request, "create_lead.html", context)
 
 
 @login_required(login_url="login")
@@ -227,6 +230,7 @@ def update_lead(request, lead_id):
 @login_required(login_url="login")
 def delete_lead(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
+    lead = Lead.objects.delete(id=lead_id)
     lead.delete()
     return redirect("list_leads")
 
@@ -234,7 +238,7 @@ def delete_lead(request, lead_id):
 @login_required(login_url="login")
 def view_lead(request, lead_id):
     lead = Lead.objects.get(id=lead_id)
-    return render(request, "view_lead.html", {"lead": lead})
+    return render(request, "view_leed.html", {"lead": lead})
 
 
 @login_required(login_url="login")

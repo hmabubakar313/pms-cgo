@@ -44,7 +44,7 @@
                         <label for="phone">Select Tenant </label>
                         <select class="form-control" name="tenant" id="tenant">
                           <option value="">Select Tenant</option>
-                          {{tenants}}
+                         
                           {% for tenant in tenants %}
                           
                           <option value="{{tenant.id}}">{{tenant.name}}</option>

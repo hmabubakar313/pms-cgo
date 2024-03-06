@@ -32,7 +32,7 @@
                        
                         {% comment %} <td><img src="{{ listing.description }}"  style="max-width: 100px;"></td> {% endcomment %}
                         <td>
-                            {% comment %} <a href="{% url 'view_lead' leed.id %}" class="btn btn-primary">View</a>   {% endcomment %}
+                            <a href="{% url 'view_lead' leed.id %}" class="btn btn-primary">View</a>  
                            
                             <a href="{% url 'delete_lead' leed.id %}" class="btn btn-danger">Delete</a>
                             <a href="{% url 'update_lead' leed.id %}" class="btn btn-success">Update</a>
