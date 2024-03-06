@@ -21,6 +21,10 @@ silenceup: ## Build developer containers.
 tests: ## Build developer containers.
 	docker compose run --rm web python manage.py test
 
+.PHONY: send_emal
+send_email: ## Build developer containers.
+	docker compose run --rm web python manage.py send_emal
+
 .PHONY: makemigrations
 makemigrations: ## Build developer containers.
 	docker compose run --rm web python manage.py makemigrations
