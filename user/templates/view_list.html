@@ -98,44 +98,46 @@
               <div class="active tab-pane" id="activity">
                 <!-- Post -->
                 <div class="card-body">
-                  <div class="tab-content">
-                    <div class="active tab-pane" id="activity">
-                      <!-- Post -->
-                      <div class="post">
-                        <div class="user-block">
-                          <table id="example2" class="table table-bordered table-hover">
-                            <thead>
-                              <tr>
-                                  <th>Title</th>
-                                  <th>Price</th>
-                                  <th>Number of Bedrooms</th>
-                                  <th>Number of Bathrooms</th>
-                                  <th>Square Footage</th>
-                                  <th>Address</th>
+                      
+                      
+                  <div class="active tab-pane" id="AboutTenant">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="card card-primary">
+                                  <div class="card-header">
+                                      <h3 class="card-title">About Listning</h3>
+                                  </div>
+                                  <!-- /.card-header -->
                                  
-                              </tr>
-                          </thead>
-                          <tbody>
-                           
-                            <tr>
-                                <td>{{ listings.title }}</td>
-                                <td>{{ listings.price }}</td>
-                                <td>{{ listings.num_bedrooms }}</td>
-                                <td>{{ listings.num_bathrooms }}</td>
-                                <td>{{ listings.square_footage }}</td>
-                                <td>{{ listings.address }}</td>
-                                
-                                {% comment %} <td><img src="{{ listing.description }}"  style="max-width: 100px;"></td> {% endcomment %}
+                                  <div class="card-body">
+                                    <strong><i class="fas fa-book mr-1"></i> Property Manager 
+                                        </strong>
+                                    <p class="text-muted">{{listings.property_manager.user}}</p>
+                                    <hr>
+                                    <strong><i class="fas fa-map-marker-alt mr-1"></i>Address</strong>
+                                    <p class="text-muted">{{listings.address}}</p>
+                                    <hr>
+                                    <strong><i class="fas fa-far fa-user mr-1"></i> Title</strong>
+                                    <p class="text-muted">{{listings.title}}</p>
+                                    <hr>
+                                    {% comment %} <strong><i class="fas fa-fas fa-person-booth mr-1"></i>Tenant</strong>
+                                    <p class="text-muted">{{listings.tenant}}</p>
+                                    <hr> {% endcomment %}
                               
-                            </tr>
-                           
-                        </tbody>
-                        </table>
+                                  
+                                </div>
+                               
+                                  <!-- /.card-body -->
+                              </div>
+                              <!-- /.card -->
+                          </div>
+                          <!-- /.col -->
                         </div>
-                        <!-- /.user-block -->
-                      </div>
-                <!-- /.post -->
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
               <!-- /.tab-pane -->
               <div class="tab-pane" id="timeline">
                 <!-- The timeline -->
@@ -143,7 +145,7 @@
                   <!-- The timeline -->
                   <div class="">
                     <!-- timeline time label -->
-                    <div class="card-body">
+                    {% comment %} <div class="card-body">
                       
                       
                           <div class="active tab-pane" id="AboutTenant">
@@ -184,7 +186,7 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> {% endcomment %}
               <!-- /.tab-pane -->
 
              
