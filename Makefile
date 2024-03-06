@@ -23,7 +23,7 @@ tests: ## Build developer containers.
 
 .PHONY: send_emal
 send_email: ## Build developer containers.
-	docker compose run --rm web python manage.py send_emal
+	docker compose run --rm web python manage.py send_email
 
 .PHONY: makemigrations
 makemigrations: ## Build developer containers.

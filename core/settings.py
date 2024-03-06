@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "user",
     "ui",
     "django_crontab",
+    "anymail",
 ]
 
 MIDDLEWARE = [
@@ -145,3 +146,20 @@ CRONJOBS = [
         ">> /path/to/log/file.log 2>&1",
     )
 ]
+
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_USE_SSL = False
+# EMAIL_HOST_USER = "testdango62@gmail.com"
+# EMAIL_HOST_PASSWORD = "Google_1122"
+
+
+ANYMAIL = {
+    "MAILGUN_API_KEY": "743799f439cbb559764c49df4777eef1-2c441066-1f574e8a",
+    "MAILGUN_SENDER_DOMAIN": "sandboxadc1eea7486a474dbf56e253fbde9c83.mailgun.org",
+}
+EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+DEFAULT_FROM_EMAIL = "testdango62@gmail.com"
+SERVER_EMAIL = "testdango62@gmail.com"
