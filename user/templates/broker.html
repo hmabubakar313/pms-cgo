@@ -33,9 +33,9 @@
                         {% comment %} <td><img src="{{ listing.description }}"  style="max-width: 100px;"></td> {% endcomment %}
                         <td>
                               
-                           
+                            <a href="{% url "view_broker" broker.id %}" class="btn btn-primary">View</a>
                             <a href="{% url "delete_broker" broker.id %}" class="btn btn-danger">Delete</a>
-                            <a href="{% url "update_broker" broker.id %}" class="btn btn-primary">Update</a>
+                            <a href="{% url "update_broker" broker.id %}" class="btn btn-success">Update</a>
                             
                         </td> 
                     </tr>

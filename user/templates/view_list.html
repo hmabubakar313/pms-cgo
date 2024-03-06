@@ -1,120 +1,204 @@
 {% extends "base.html" %}
-{% block title %}Table{% endblock %}
+{% block title %}Propery Listning View{% endblock %}
 {% block content %}
 <section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
 
-  <!-- Default box -->
-  <div class="card">
-    <div class="card-header">
-      <h3 class="card-title">Projects Detail</h3>
+        <!-- Profile Image -->
+        <div class="card card-primary card-outline">
+          <div class="card-body box-profile">
+            <div class="text-center">
+              <span class="username">
+                {% if listings.image.all %}
+                {% for image in listings.image.all %}
+                <img class="profile-user-img img-fluid img-circle" src="{{ image.image.url }}" alt="User Image">
+                {% endfor %}
+                {% endif %}
+                
+              </span>
+              
+            </div>
 
-      <div class="card-tools">
-        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-          <i class="fas fa-minus"></i>
-        </button>
-        <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-    </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-12 col-md-12 col-lg-8 order-2 order-md-1">
-          <div class="row">
-            <div class="col-12 col-sm-4">
-              <div class="info-box bg-light">
-                <div class="info-box-content">
-                  <span class="info-box-text text-center text-muted">Address</span>
-                  <span class="info-box-number text-center text-muted mb-0">{{ listings.address }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-sm-4">
-              <div class="info-box bg-light">
-                <div class="info-box-content">
-                  <span class="info-box-text text-center text-muted">No. of Sq. Feet</span>
-                  <span class="info-box-number text-center text-muted mb-0">{{ listings.square_footage }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-sm-4">
-              <div class="info-box bg-light">
-                <div class="info-box-content">
-                  <span class="info-box-text text-center text-muted">Number of Bedrooms</span>
-                  <span class="info-box-number text-center text-muted mb-0">{{ listings.num_bathrooms }}</span>
-                </div>
-              </div>
-            </div>
+            <h3 class="profile-username text-center">{{listings.title}}</h3>
+
+
+            <ul class="list-group list-group-unbordered mb-3">
+              <li class="list-group-item">
+                <b>No. Of Bedrooms</b> <a class="float-right">{{listings.num_bedrooms}}</a>
+              </li>
+              <li class="list-group-item">
+                <b>num_bathrooms</b> <a class="float-right">{{listings.num_bathrooms}}</a>
+              </li>
+              <li class="list-group-item">
+                <b>square_footage</b> <a class="float-right">{{listings.square_footage}}</a>
+              </li>
+            </ul>
+
+            <a href="#" class="btn btn-success btn-block"><b>Available</b></a>
           </div>
-          <div class="row">
-            <div class="col-12">
-              <h4>{{listings.title}}</h4>
-                <div class="post">
-                  <div class="user-block">
-                    <span class="username">
-                      {% if listings.image.all %}
-                      {% for image in listings.image.all %}
-                      <img class="img-circle" src="{{ image.image.url }}" alt="User Image">
-                      {% endfor %}
-                      {% endif %}
-                      <a href="#">{{ listings.property_manager }}</a>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+        <!-- About Me Box -->
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">About Property</h3>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            {% comment %} <strong><i class="fas fa-book mr-1"></i> Education</strong>
+
+            <p class="text-muted">
+              B.S. in Computer Science from the University of Tennessee at Knoxville
+            </p>
+
+            <hr> {% endcomment %}
+
+            <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+
+            <p class="text-muted">{{listings.address}}</p>
+
+            <hr>
+
+            <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
+
+            <p class="text-muted">
+              <span class="tag tag-danger">UI Design</span>
+              <span class="tag tag-success">Coding</span>
+              <span class="tag tag-info">Javascript</span>
+              <span class="tag tag-warning">PHP</span>
+              <span class="tag tag-primary">Node.js</span>
+            </p>
+
+            <hr>
+
+            <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
+
+            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+      <div class="col-md-9">
+        <div class="card">
+          <div class="card-header p-2">
+            <ul class="nav nav-pills">
+              <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Property Listning</a></li>
+              <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Tenant Details</a></li>
+              <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+            </ul>
+          </div><!-- /.card-header -->
+          <div class="card-body">
+            <div class="tab-content">
+              <div class="active tab-pane" id="activity">
+                <!-- Post -->
+                <div class="card-body">
+                  <div class="tab-content">
+                    <div class="active tab-pane" id="activity">
+                      <!-- Post -->
+                      <div class="post">
+                        <div class="user-block">
+                          <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                              <tr>
+                                  <th>Title</th>
+                                  <th>Price</th>
+                                  <th>Number of Bedrooms</th>
+                                  <th>Number of Bathrooms</th>
+                                  <th>Square Footage</th>
+                                  <th>Address</th>
+                                 
+                              </tr>
+                          </thead>
+                          <tbody>
+                           
+                            <tr>
+                                <td>{{ listings.title }}</td>
+                                <td>{{ listings.price }}</td>
+                                <td>{{ listings.num_bedrooms }}</td>
+                                <td>{{ listings.num_bathrooms }}</td>
+                                <td>{{ listings.square_footage }}</td>
+                                <td>{{ listings.address }}</td>
+                                
+                                {% comment %} <td><img src="{{ listing.description }}"  style="max-width: 100px;"></td> {% endcomment %}
+                              
+                            </tr>
+                           
+                        </tbody>
+                        </table>
+                        </div>
+                        <!-- /.user-block -->
+                      </div>
+                <!-- /.post -->
+              </div>
+              <!-- /.tab-pane -->
+              <div class="tab-pane" id="timeline">
+                <!-- The timeline -->
+                <div class="tab-pane" id="property">
+                  <!-- The timeline -->
+                  <div class="">
+                    <!-- timeline time label -->
+                    <div class="card-body">
                       
-                    </span>
+                      
+                          <div class="active tab-pane" id="AboutTenant">
+                              <div class="row">
+                                  <div class="col-md-6">
+                                      <div class="card card-primary">
+                                          <div class="card-header">
+                                              <h3 class="card-title">About Tenant</h3>
+                                          </div>
+                                          <!-- /.card-header -->
+                                          {% for tenant in tenants  %}
+                                          <div class="card-body">
+                                            <strong><i class="fas fa-book mr-1"></i> User 
+                                                </strong>
+                                            <p class="text-muted">{{tenant.user}}</p>
+                                            <hr>
+                                            <strong><i class="fas fa-map-marker-alt mr-1"></i>Address</strong>
+                                            <p class="text-muted">{{tenant.address}}</p>
+                                            <hr>
+                                            <strong><i class="fas fa-far fa-user mr-1"></i> Name</strong>
+                                            <p class="text-muted">{{tenant.name}}</p>
+                                            <hr>
+                                            <strong><i class="fas fa-fas fa-person-booth mr-1"></i>Broker</strong>
+                                            <p class="text-muted">{{tenant.broker}}</p>
+                                            <hr>
+                                            <strong><i class="far fa-fas fa-fas fa-phone mr-1"></i>Phone Number</strong>
+                                            <p class="text-muted">{{tenant.phone_number}}</p>
+                                            <hr>
+                                        </div>
+                                          {% endfor %}
+                                          <!-- /.card-body -->
+                                      </div>
+                                      <!-- /.card -->
+                                  </div>
+                                  <!-- /.col -->
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+              <!-- /.tab-pane -->
 
-                    <span class="description">Shared publicly - 7:45 PM today</span>
-                    
-                  </div>
-                  <!-- /.user-block -->
-                 
-
-                  
-                </div>
-
-                
-
-                
-            </div>
-          </div>
+             
+              <!-- /.tab-pane -->
+           
+            <!-- /.tab-content -->
+          </div><!-- /.card-body -->
         </div>
-        <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
-          <h3 class="text-primary"><i class="fas fa-paint-brush"></i> AdminLTE v3</h3>
-          <p class="text-muted">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terr.</p>
-          <br>
-          <div class="text-muted">
-            <p class="text-sm">Client Company
-              <b class="d-block">Deveint Inc</b>
-            </p>
-            <p class="text-sm">Project Leader
-              <b class="d-block">Tony Chicken</b>
-            </p>
-          </div>
-
-          <h5 class="mt-5 text-muted">Project files</h5>
-          <ul class="list-unstyled">
-            <li>
-              <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-word"></i> Functional-requirements.docx</a>
-            </li>
-            <li>
-              <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-pdf"></i> UAT.pdf</a>
-            </li>
-            <li>
-              <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-envelope"></i> Email-from-flatbal.mln</a>
-            </li>
-            <li>
-              <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-image "></i> Logo.png</a>
-            </li>
-            <li>
-              <a href="" class="btn-link text-secondary"><i class="far fa-fw fa-file-word"></i> Contract-10_12_2014.docx</a>
-            </li>
-          </ul>
-          
-        </div>
+        <!-- /.card -->
       </div>
+      <!-- /.col -->
     </div>
-    <!-- /.card-body -->
-  </div>
-  <!-- /.card -->
-
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
 </section>
 {% endblock  %}
 

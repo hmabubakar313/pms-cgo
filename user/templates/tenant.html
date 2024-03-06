@@ -33,10 +33,11 @@
                         <td>{{ tenant.user.email }}</td>
                          
                         <td>
+                          <a href="{% url 'view_tenant' tenant.id %}" class="btn btn-primary">View</a>
                           <a href="{% url 'delete_tenant' tenant.id %}" class="btn btn-danger">Delete</a>
                         
                         
-                          <a href="{% url 'update_tenant' tenant.id %}" class="btn btn-primary">Update</a>
+                          <a href="{% url 'update_tenant' tenant.id %}" class="btn btn-success">Update</a>
                         </td>
                     </tr>
                     {% endfor %}
