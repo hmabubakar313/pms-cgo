@@ -232,6 +232,12 @@ def delete_lead(request, lead_id):
 
 
 @login_required(login_url="login")
+def view_lead(request, lead_id):
+    lead = Lead.objects.get(id=lead_id)
+    return render(request, "view_lead.html", {"lead": lead})
+
+
+@login_required(login_url="login")
 def list_tenants(request):
     tenants = Tenant.objects.all()
     return render(request, "tenant.html", {"tenants": tenants})
@@ -287,7 +293,12 @@ def update_tenant(request, tenant_id):
     else:
         return render(request, "update_tenant.html", {"tenant": tenant})
 
+@login_required(login_url="login")
+def view_tenant(request, tenant_id):
+    tenant = Tenant.objects.get(id=tenant_id)
+    return render(request, "view_tenant.html", {"tenant": tenant})
 
+@login_required(login_url="login")
 def create_broker(request):
     # Ensure property manager is associated with the current user
     property_manager = PropertyManager.objects.get(user=request.user)
@@ -323,13 +334,13 @@ def create_broker(request):
         {"broker_form": broker_form, "user_form": user_form},
     )
 
-
+@login_required(login_url="login")
 def delete_broker(request, broker_id):
     broker = get_object_or_404(Broker, id=broker_id)
     broker.delete()
     return redirect("broker_list")
 
-
+@login_required(login_url="login")
 def update_broker(request, broker_id):
     broker = Broker.objects.get(id=broker_id)
     if request.method == "POST" and broker_id:
@@ -344,11 +355,13 @@ def update_broker(request, broker_id):
         #     form.save()
     return render(request, "update_broker.html", {"broker": broker})
 
-
+@login_required(login_url="login")
 def broker_list(request):
     brokers = Broker.objects.all()
     return render(request, "broker.html", {"brokers": brokers})
 
 
-def retrieve_broker(request, broker_id):
-    return Broker.objects.get(id=broker_id)
+@login_required(login_url="login")
+def view_broker(request, broker_id):
+    broker = Broker.objects.get(id=broker_id)
+    return render(request, "view_broker.html", {"broker": broker})
