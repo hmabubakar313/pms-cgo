@@ -180,7 +180,8 @@ def update_listing(request, list_id):
 def create_lead(request):
     if request.method == "POST":
         date_time = request.POST.get("datetime")
-        datetime_object = datetime.strptime(date_time, "%m/%d/%Y %I:%M %p")
+        print("date_time:", date_time)
+        datetime_object = datetime.strptime(date_time, "%Y-%m-%dT%H:%M")
         person_in_charge = request.POST.get("person_in_charge")
         status = request.POST.get("status")
         tenant_met_id = request.POST.get("tenant")
@@ -212,7 +213,7 @@ def update_lead(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
     if request.method == "POST":
         date_time = request.POST.get("datetime")
-        datetime_object = datetime.strptime(date_time, "%m/%d/%Y %I:%M %p")
+        datetime_object = datetime.strptime(date_time, "%Y-%m-%dT%H:%M")
         lead.datetime = datetime_object
         lead.person_in_charge = request.POST.get("person_in_charge")
         lead.status = request.POST.get("status")
